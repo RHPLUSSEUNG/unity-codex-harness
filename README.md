@@ -2,6 +2,22 @@
 
 Unity 프로젝트에서 GPT Project, Codex, Unity MCP를 함께 사용할 때의 하네스 구조입니다.
 
+이 저장소는 Unity 프로젝트 자체가 아니라, **Unity 프로젝트 루트에 복사해서 사용하는 Markdown Harness 템플릿**입니다.
+
+권장 위치:
+
+```text
+UnityProjectRoot/
+├── Assets/
+├── Packages/
+├── ProjectSettings/
+├── AGENTS.md
+├── docs/
+├── prompts/
+├── phases/
+└── scripts/
+```
+
 목표는 단순합니다.
 
 ```text
@@ -154,6 +170,14 @@ MVP Exclusions
 - ScriptableObject 사용 기준
 ```
 
+주의:
+
+```text
+이 저장소의 ARCHITECTURE.md는 템플릿입니다.
+Player / Weapon / Enemy 같은 항목은 예시이며, 실제 프로젝트 구조로 확정된 것이 아닙니다.
+실제 Unity 프로젝트에 복사한 뒤 프로젝트에 맞게 반드시 교체합니다.
+```
+
 ### docs/ADR.md
 
 왜 그렇게 결정했는지 기록합니다.
@@ -206,6 +230,8 @@ Required Report
 ```text
 TASK.md에는 현재 작업 하나만 둔다.
 여러 작업을 넣지 않는다.
+실제 기능 작업에서는 Allowed Files를 1~5개 수준으로 좁힌다.
+docs/** 같은 넓은 범위는 문서 정리 작업에서만 사용한다.
 ```
 
 ### docs/UNITY_CONTEXT.md
@@ -229,6 +255,8 @@ Safety Notes
 .unity, .prefab 원문을 붙이지 않는다.
 요약만 쓴다.
 150줄을 넘으면 SCENE_INDEX.md / PREFAB_INDEX.md / SCRIPT_INDEX.md로 분리한다.
+이 파일의 예시 Scene, GameObject, Prefab, Script는 실제 존재한다고 가정하지 않는다.
+실제 프로젝트 상태를 확인한 뒤 프로젝트별 내용으로 교체한다.
 ```
 
 ---
@@ -352,6 +380,13 @@ Codex는 TASK.md 하나만 실행한다.
 dangerous_cmd_guard.py
 unity_yaml_guard.py
 circuit_breaker.py
+```
+
+주의:
+
+```text
+현재 guard 스크립트는 stub입니다.
+로컬 workflow, pre-commit hook, Codex wrapper, CI 검사에 직접 연결하지 않으면 저장소를 자동으로 보호하지 않습니다.
 ```
 
 ### dangerous_cmd_guard.py
