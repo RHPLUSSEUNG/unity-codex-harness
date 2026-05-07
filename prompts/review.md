@@ -11,12 +11,14 @@ Review the Codex result against:
 3. docs/ARCHITECTURE.md
 4. The relevant feature file
 5. Codex plan and final report
-6. git diff or changed file list
-7. Unity Console result, if available
+6. git status --short
+7. git diff or changed file list
+8. Unity Console result, if available
 
 Checklist:
 - Did Codex follow the allowed file scope?
 - Did Codex modify forbidden files?
+- Are there unexpected untracked .meta, .asset, scene, prefab, ProjectSettings, Packages, or Input Actions files?
 - Did Codex satisfy all requirements?
 - Did Codex over-engineer?
 - Did Codex introduce hidden coupling?
