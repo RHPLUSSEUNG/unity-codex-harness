@@ -8,6 +8,18 @@ Harness-Setup-01
 
 Use this repository as a starting template for Unity + Codex + GPT Project + MCP harness engineering.
 
+## Template Warning
+
+This `TASK.md` is for harness setup only.
+
+For real Unity feature work:
+
+- Replace this file with the current feature task.
+- Keep one task only.
+- Narrow `Allowed Files` to 1-5 files when possible.
+- Do not use `docs/**` unless the task is documentation-only.
+- Do not allow Unity scene, prefab, asset, meta, ProjectSettings, Packages, or Input Actions changes unless explicitly required and reviewed.
+
 ## Read
 
 - AGENTS.md
@@ -43,6 +55,7 @@ Use this repository as a starting template for Unity + Codex + GPT Project + MCP
 - Use `ARCHITECTURE.md` to define structure and boundaries.
 - Use `ADR.md` to record decisions and tradeoffs.
 - Use `UNITY_CONTEXT.md` as a summary, not raw Unity YAML.
+- Mark template examples clearly so Codex does not assume they exist in the real Unity project.
 
 ## Out of Scope
 
@@ -56,6 +69,7 @@ Use this repository as a starting template for Unity + Codex + GPT Project + MCP
 - README explains how to use them.
 - Prompts are available for Codex, MCP, and review.
 - Guard script stubs are available for later extension.
+- Template warnings are clear.
 
 ## Required Report
 
