@@ -14,24 +14,28 @@ First, ask me for or infer the following:
 2. Unity version and render pipeline
 3. Target platform
 4. Current folder structure
-5. Existing scenes and prefabs
+5. Existing scenes and prefabs, summarized only
 6. Current scripts and systems
 7. MVP scope
 8. MVP exclusions
 9. Coding conventions
 10. Risky files or systems Codex must not touch
 
-Then help me fill or rewrite:
+Then help me fill or rewrite the required setup docs:
 - docs/PRD.md
 - docs/ARCHITECTURE.md
 - docs/CURRENT.md
-- docs/UNITY_CONTEXT.md
 - docs/CODEMAP.md
-- docs/INTEGRATION_GUIDE.md
 - docs/features/001_FirstFeature.md
 - docs/TASK.md
 - docs/HANDOFF.md
-- docs/NEXT_PROMPT.md
+
+Create or update these optional docs only if needed:
+- docs/UNITY_CONTEXT.md
+- docs/INTEGRATION_GUIDE.md
+- docs/REVIEW.md
+- docs/DECISIONS_PENDING.md
+- docs/ADR.md
 
 Important:
 - Do not write implementation code yet.
@@ -40,5 +44,5 @@ Important:
 - Summarize Unity scene and prefab state instead of pasting YAML.
 - Use Manual Unity Integration by default.
 - Define the first Codex task with a proper Context Level.
-- Prepare a copy-paste-ready prompt for the Implementer Agent in docs/NEXT_PROMPT.md.
+- Prepare a copy-paste-ready prompt for the Implementer Agent in docs/HANDOFF.md / Next Agent Prompt.
 ```
