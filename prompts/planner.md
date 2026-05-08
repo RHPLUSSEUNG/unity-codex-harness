@@ -14,7 +14,11 @@ Read first:
 4. docs/CURRENT.md
 5. docs/HANDOFF.md
 6. docs/CODEMAP.md
-7. docs/DECISIONS_PENDING.md
+
+Read only if relevant:
+- docs/DECISIONS_PENDING.md
+- docs/ADR.md
+- docs/UNITY_CONTEXT.md
 
 Rules:
 - Do not implement code.
@@ -39,6 +43,5 @@ Output:
 If documentation updates are allowed, update:
 - docs/features/[feature].md
 - docs/TASK.md
-- docs/HANDOFF.md
-- docs/NEXT_PROMPT.md
+- docs/HANDOFF.md, including the Next Agent Prompt section
 ```
