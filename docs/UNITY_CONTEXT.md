@@ -6,6 +6,8 @@ This is a template. Do not assume any scene, prefab, GameObject, component, or s
 
 Do not paste raw `.unity`, `.prefab`, `.asset`, or `.meta` contents here.
 
+Manual Unity integration should be documented in `docs/INTEGRATION_GUIDE.md` and applied by the user in Unity Editor.
+
 ## Scenes
 
 ### Example: MainScene
@@ -55,13 +57,14 @@ Status: Example feature target. Not guaranteed to exist.
 ## Connection Status
 
 - Scene objects are not connected in this template.
-- MCP integration should be done after code implementation.
+- Manual integration instructions belong in `docs/INTEGRATION_GUIDE.md`.
 - Replace this section with actual scene, prefab, component, and SerializedField connection status.
 
 ## Safety Notes
 
-- Do not manually edit scene or prefab YAML.
-- Use Unity MCP or Unity Editor for object/component connections.
-- Check Unity Console after MCP changes.
+- Do not edit scene or prefab YAML directly.
+- Do not use Unity MCP by default.
+- Use Unity Editor for object, component, and SerializedField connections unless a task explicitly allows another workflow.
+- Check Unity Console after manual integration.
 - Update this file after meaningful scene, prefab, or script structure changes.
 - If this file exceeds about 150 lines, split summaries into `SCENE_INDEX.md`, `PREFAB_INDEX.md`, and `SCRIPT_INDEX.md`.
