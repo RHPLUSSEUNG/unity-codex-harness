@@ -25,6 +25,17 @@ Rules:
 - Do not use Unity MCP by default.
 - If Unity scene or prefab work is needed, write manual integration notes instead of modifying Unity files.
 
+Quality bar:
+- Prefer modifying existing systems over creating new parallel systems.
+- Do not introduce a new manager, framework, or abstraction unless docs/TASK.md explicitly requires it.
+- Preserve public API and serialized field compatibility unless the task allows breaking changes.
+- Keep Unity lifecycle methods small.
+- Avoid hidden scene or prefab assumptions.
+- Add null checks only where they reflect a real Unity assignment risk.
+- Avoid broad defensive code that hides configuration errors.
+- Keep implementation proportional to the task scope.
+- Include compile verification, test result, or explain why verification was not run.
+
 Before editing, output a plan:
 1. Context level detected
 2. Files to inspect
@@ -43,10 +54,11 @@ After editing, output a report:
 2. Summary of changes
 3. Requirements satisfied
 4. How to test
-5. Manual Unity integration needed
-6. Documentation updates needed
-7. Possible side effects
-8. Suggested next agent
+5. Compile or verification result
+6. Manual Unity integration needed
+7. Documentation updates needed
+8. Possible side effects
+9. Suggested next agent
 
 If docs/TASK.md allows documentation updates, update docs/HANDOFF.md with:
 1. What changed
@@ -56,5 +68,5 @@ If docs/TASK.md allows documentation updates, update docs/HANDOFF.md with:
 5. Known risks
 6. Verification status
 7. Next recommended agent
-8. Next agent instructions
+8. Next agent prompt
 ```
