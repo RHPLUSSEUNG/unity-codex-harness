@@ -42,22 +42,28 @@ For real Unity feature work:
 - Do not use `docs/**` unless the task is documentation-only.
 - Do not allow Unity scene, prefab, asset, meta, ProjectSettings, Packages, or Input Actions changes unless explicitly required and reviewed.
 - Use `Manual Instructions Only` for Unity integration by default.
+- Split `Read` into required and optional files so agents do not read every harness document by default.
 
 ## Read
+
+### Required
 
 - AGENTS.md
 - docs/CURRENT.md
 - docs/PRD.md
 - docs/ARCHITECTURE.md
-- docs/ADR.md
+- docs/TASK.md
 - docs/HANDOFF.md
-- docs/REVIEW.md
-- docs/NEXT_PROMPT.md
 - docs/CODEMAP.md
+- docs/features/001_FirstFeature.md
+
+### Optional, only if relevant
+
+- docs/ADR.md
+- docs/REVIEW.md
 - docs/UNITY_CONTEXT.md
 - docs/INTEGRATION_GUIDE.md
 - docs/DECISIONS_PENDING.md
-- docs/features/001_FirstFeature.md
 
 ## Allowed Files
 
@@ -87,9 +93,9 @@ For real Unity feature work:
 - Define Planner, Implementer, Reviewer, and Unity Guide Writer roles.
 - Use Markdown files as minimal handoff documents between separate agent sessions.
 - Use `HANDOFF.md` as an actionable handoff, not a passive log.
-- Use `NEXT_PROMPT.md` to tell the user what to send to the next agent.
+- Store the next copy-paste-ready agent prompt in `HANDOFF.md` instead of a separate `NEXT_PROMPT.md`.
 - Use `CODEMAP.md` to reduce broad source searching.
-- Use `INTEGRATION_GUIDE.md` to track manual Unity Editor steps.
+- Treat `REVIEW.md`, `INTEGRATION_GUIDE.md`, `UNITY_CONTEXT.md`, `DECISIONS_PENDING.md`, and `ADR.md` as optional unless the current task requires them.
 - Mark template examples clearly so Codex does not assume they exist in the real Unity project.
 
 ## Out of Scope
@@ -112,8 +118,9 @@ AI agents must not directly modify Unity scenes, prefabs, assets, meta files, Pr
 - README explains managed context and manual Unity integration.
 - README explains new Unity project setup.
 - README explains session-separated agent workflow.
+- README distinguishes initial required docs from optional docs.
 - Prompts are available for project setup, planning, implementation, review, and manual Unity integration.
-- Handoff documents are available.
+- `HANDOFF.md` is the single next-prompt handoff location.
 - Guard script stubs remain available for later extension.
 - Template warnings are clear.
 
@@ -131,7 +138,7 @@ Include:
 6. Known risks
 7. Verification status
 8. Next recommended agent
-9. Next agent instructions
+9. Next agent prompt
 
 ## Required Report
 
