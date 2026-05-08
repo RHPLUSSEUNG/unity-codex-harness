@@ -25,7 +25,7 @@ Planner Agent      = 설계, 기능 분해, TASK 작성
 Implementer Agent  = TASK 기준 코드 구현
 Reviewer Agent     = PR / diff / report 리뷰
 User               = Unity Editor에서 씬, 프리팹, SerializedField 수동 반영
-Markdown Harness   = 규칙, 상태, 작업 계약서, 인수인계서
+Markdown Harness   = 규칙, 상태, 작업 계약서, 최소 인수인계서
 ```
 
 이 하네스의 목표는 context를 무조건 최소화하는 것이 아닙니다.
@@ -33,9 +33,9 @@ Markdown Harness   = 규칙, 상태, 작업 계약서, 인수인계서
 목표는 **코드 품질에 필요한 context는 유지하고, Unity 프로젝트 전체를 무분별하게 읽지 않게 하는 것**입니다.
 
 ```text
-Too much context  -> 느림, 비쌈, task focus 붕괴
+Too much context   -> 느림, 비쌈, task focus 붕괴
 Too little context -> 아키텍처 위반, 중복 시스템, 낮은 코드 품질
-Managed context   -> task 위험도에 맞는 충분한 context
+Managed context    -> task 위험도에 맞는 충분한 context
 ```
 
 ---
@@ -48,7 +48,7 @@ Managed context   -> task 위험도에 맞는 충분한 context
 Codex는 TASK.md의 현재 작업 하나만 수행한다.
 Unity 씬/프리팹은 기본적으로 AI가 직접 수정하지 않는다.
 Unity 반영은 사용자에게 Manual Integration Guide로 제공한다.
-에이전트 간 인수인계는 Markdown 문서로 남긴다.
+에이전트 간 인수인계는 HANDOFF.md 하나를 중심으로 남긴다.
 ```
 
 이 하네스는 고수준 자동 멀티 에이전트 시스템이 아닙니다.
@@ -56,10 +56,10 @@ Unity 반영은 사용자에게 Manual Integration Guide로 제공한다.
 대신 서로 다른 ChatGPT / Codex 세션에서 다음 역할을 수동으로 분리합니다.
 
 ```text
-Planner session     -> TASK.md, feature spec, NEXT_PROMPT.md 작성
+Planner session     -> TASK.md, feature spec, HANDOFF.md의 next prompt 작성
 Implementer session -> 코드 변경, HANDOFF.md 갱신
-Reviewer session    -> PR 리뷰, REVIEW.md, NEXT_PROMPT.md 갱신
-Unity user action   -> Editor에서 수동 반영, INTEGRATION_GUIDE.md 참고
+Reviewer session    -> PR 리뷰, REVIEW.md와 HANDOFF.md 갱신
+Unity user action   -> Editor에서 수동 반영, 필요 시 INTEGRATION_GUIDE.md 참고
 ```
 
 ---
@@ -83,14 +83,14 @@ Unity MCP는 유용할 수 있지만, 이 하네스의 기본 흐름에서는 �
 AI는 Unity 씬, 프리팹, asset, meta, ProjectSettings를 직접 수정하지 않는다.
 AI는 사용자가 Unity Editor에서 반영할 수 있는 수동 절차를 작성한다.
 사용자는 Editor에서 직접 반영한다.
-반영 결과만 UNITY_CONTEXT.md와 INTEGRATION_GUIDE.md에 요약한다.
+반영 결과만 UNITY_CONTEXT.md 또는 INTEGRATION_GUIDE.md에 요약한다.
 ```
 
 MCP를 꼭 써야 하는 경우에는 별도 advanced workflow로 다루고, 기본 템플릿에는 포함하지 않습니다.
 
 ---
 
-## 3. 최종 하네스 구조
+## 3. 하네스 구조
 
 ```text
 project/
@@ -103,10 +103,9 @@ project/
 │   ├── CURRENT.md
 │   ├── TASK.md
 │   ├── HANDOFF.md
-│   ├── REVIEW.md
-│   ├── NEXT_PROMPT.md
 │   ├── CODEMAP.md
 │   ├── UNITY_CONTEXT.md
+│   ├── REVIEW.md
 │   ├── INTEGRATION_GUIDE.md
 │   ├── DECISIONS_PENDING.md
 │   └── features/
@@ -129,7 +128,9 @@ project/
         └── circuit_breaker.py
 ```
 
-처음에는 아래 파일만 채워도 충분합니다.
+### 초기 필수 문서
+
+새 프로젝트에 처음 적용할 때는 아래 문서만 먼저 채워도 충분합니다.
 
 ```text
 AGENTS.md
@@ -138,12 +139,23 @@ docs/ARCHITECTURE.md
 docs/CURRENT.md
 docs/TASK.md
 docs/HANDOFF.md
-docs/NEXT_PROMPT.md
 docs/CODEMAP.md
-docs/UNITY_CONTEXT.md
-docs/INTEGRATION_GUIDE.md
 docs/features/001_FirstFeature.md
 ```
+
+### 필요할 때만 쓰는 선택 문서
+
+아래 문서는 모든 작업에서 읽거나 채울 필요가 없습니다.
+
+```text
+docs/ADR.md                  # 설계 결정이 생겼을 때
+docs/UNITY_CONTEXT.md        # 씬/프리팹/SerializedField 요약이 필요할 때
+docs/REVIEW.md               # PR 또는 diff 리뷰가 있을 때
+docs/INTEGRATION_GUIDE.md    # 사용자의 Unity Editor 수동 반영 절차가 필요할 때
+docs/DECISIONS_PENDING.md    # 사용자가 결정해야 할 문제가 있을 때
+```
+
+`docs/NEXT_PROMPT.md`는 별도 파일로 두지 않습니다. 다음 agent에게 보낼 copy-paste prompt는 `docs/HANDOFF.md`의 **Next Agent Prompt** 섹션에 둡니다.
 
 ---
 
@@ -164,6 +176,7 @@ docs/features/001_FirstFeature.md
 ```text
 Do not always use the smallest context.
 Use the smallest context that preserves correctness.
+Do not read every harness document just because it exists.
 ```
 
 ---
@@ -173,17 +186,6 @@ Use the smallest context that preserves correctness.
 ### AGENTS.md
 
 모든 세션이 따르는 최상위 규칙입니다.
-
-포함 내용:
-
-```text
-- Managed context rules
-- One task only
-- No scope expansion
-- No Unity scene / prefab / asset direct edits
-- Manual Unity integration by default
-- Handoff required after each agent task
-```
 
 ### docs/PRD.md
 
@@ -215,23 +217,9 @@ Non-goals
 - ScriptableObject 사용 기준
 ```
 
-### docs/ADR.md
-
-왜 그렇게 결정했는지 기록합니다.
-
-형식:
-
-```text
-Decision: 무엇을 선택했는가
-Why: 왜 선택했는가
-Tradeoff: 무엇을 포기했는가
-```
-
 ### docs/CURRENT.md
 
 현재 프로젝트 상태판입니다.
-
-포함 내용:
 
 ```text
 Completed
@@ -270,51 +258,24 @@ TASK.md에는 현재 작업 하나만 둔다.
 여러 작업을 넣지 않는다.
 Allowed Files는 가능한 1-5개 수준으로 좁힌다.
 docs/** 같은 넓은 범위는 문서 정리 작업에서만 사용한다.
+Read 목록은 Required / Optional로 나누어 모든 문서를 읽지 않게 한다.
 ```
 
 ### docs/HANDOFF.md
 
 단순 로그가 아니라 **다음 세션을 위한 최소 인수인계서**입니다.
 
-포함 내용:
+핵심 역할:
 
 ```text
-Current Feature
-Last Agent
-What Changed
-Why It Changed
-Files Changed
-Files To Read Next
-Known Risks
-Verification Status
-Next Recommended Agent
-Next Agent Instructions
-```
-
-### docs/REVIEW.md
-
-Reviewer Agent가 PR / diff / report를 검토한 결과를 남기는 문서입니다.
-
-포함 내용:
-
-```text
-Verdict
-Scope Check
-Problems
-Required Fixes
-Suggested Prompt For Implementer
-Documentation Updates Needed
-```
-
-### docs/NEXT_PROMPT.md
-
-사용자가 다음 세션에 그대로 복사해 넣을 prompt입니다.
-
-```text
-Send this to: Planner / Implementer / Reviewer / Unity Guide Writer
-Prompt body
-Required files to read
-Expected output
+What changed
+Why it changed
+Files changed
+Files to read next
+Known risks
+Verification status
+Next recommended agent
+Next agent prompt
 ```
 
 ### docs/CODEMAP.md
@@ -327,37 +288,9 @@ Feature -> related files
 Do-not-search-broadly notes
 ```
 
-### docs/UNITY_CONTEXT.md
+### 선택 문서
 
-Unity scene, prefab, GameObject, script 상태 요약입니다.
-
-원칙:
-
-```text
-.unity, .prefab, .asset, .meta 원문을 붙이지 않는다.
-요약만 쓴다.
-150줄을 넘으면 SCENE_INDEX.md / PREFAB_INDEX.md / SCRIPT_INDEX.md로 분리한다.
-```
-
-### docs/INTEGRATION_GUIDE.md
-
-사용자가 Unity Editor에서 직접 반영할 수동 절차를 기록합니다.
-
-포함 내용:
-
-```text
-Target scene or prefab
-GameObjects to select
-Components to add
-SerializedFields to assign
-Inspector values to set
-PlayMode verification steps
-Console checks
-```
-
-### docs/DECISIONS_PENDING.md
-
-Planner 또는 사용자가 결정해야 하는 미해결 질문을 모읍니다.
+`docs/REVIEW.md`, `docs/INTEGRATION_GUIDE.md`, `docs/UNITY_CONTEXT.md`, `docs/DECISIONS_PENDING.md`, `docs/ADR.md`는 필요한 상황에서만 읽거나 갱신합니다.
 
 ---
 
@@ -382,18 +315,26 @@ UnityProjectRoot/
 
 `prompts/project_setup.md` 내용을 GPT Project에 보냅니다.
 
-GPT는 구현 코드를 작성하지 않고 다음 문서를 프로젝트에 맞게 채워야 합니다.
+GPT는 구현 코드를 작성하지 않고 최소 필수 문서를 프로젝트에 맞게 채워야 합니다.
 
 ```text
 docs/PRD.md
 docs/ARCHITECTURE.md
 docs/CURRENT.md
-docs/UNITY_CONTEXT.md
-docs/CODEMAP.md
-docs/INTEGRATION_GUIDE.md
-docs/features/001_FirstFeature.md
 docs/TASK.md
-docs/NEXT_PROMPT.md
+docs/HANDOFF.md
+docs/CODEMAP.md
+docs/features/001_FirstFeature.md
+```
+
+필요한 경우에만 아래 문서를 추가로 채웁니다.
+
+```text
+docs/UNITY_CONTEXT.md
+docs/INTEGRATION_GUIDE.md
+docs/REVIEW.md
+docs/DECISIONS_PENDING.md
+docs/ADR.md
 ```
 
 ### Step 3. 템플릿 예시 교체
@@ -423,15 +364,15 @@ Done Criteria
 
 `docs/TASK.md`는 항상 현재 작업 하나만 담습니다.
 
-### Step 6. NEXT_PROMPT.md를 다음 agent에게 전달
+### Step 6. HANDOFF.md의 Next Agent Prompt를 다음 agent에게 전달
 
 예:
 
 ```text
-Planner가 NEXT_PROMPT.md 작성
+Planner가 HANDOFF.md의 Next Agent Prompt 작성
 -> 사용자가 새 Codex 세션에 Implementer prompt 전달
 -> Implementer가 코드 구현 후 HANDOFF.md 갱신
--> 사용자가 Reviewer 세션에 REVIEW prompt 전달
+-> 사용자가 Reviewer 세션에 reviewer prompt 전달
 ```
 
 ---
@@ -441,19 +382,18 @@ Planner가 NEXT_PROMPT.md 작성
 ```text
 1. User gives high-level request
 2. Planner Agent updates feature spec and TASK.md
-3. Planner Agent writes docs/NEXT_PROMPT.md for Implementer
+3. Planner Agent writes the next prompt in HANDOFF.md
 4. User starts a new session with Implementer Agent
 5. Implementer reads TASK.md + HANDOFF.md + required files
 6. Implementer changes code only
 7. Implementer updates HANDOFF.md
 8. User opens PR
 9. Reviewer Agent reviews PR / diff / HANDOFF.md
-10. Reviewer updates REVIEW.md
-11. Reviewer writes NEXT_PROMPT.md for Implementer or Planner
-12. If Unity scene/prefab work is needed, Unity Guide Writer writes manual editor steps
-13. User applies Unity Editor changes manually
-14. User updates or asks GPT to update UNITY_CONTEXT.md summary
-15. Planner prepares next TASK.md
+10. Reviewer updates REVIEW.md and HANDOFF.md if needed
+11. If Unity scene/prefab work is needed, Unity Guide Writer writes manual editor steps
+12. User applies Unity Editor changes manually
+13. User updates or asks GPT to update UNITY_CONTEXT.md summary when needed
+14. Planner prepares next TASK.md
 ```
 
 ---
@@ -498,7 +438,7 @@ scripts/guards/circuit_breaker.py
 ```text
 Minimum context가 아니라 Managed context
 MCP 기본 사용이 아니라 Manual Unity Integration
-단일 로그가 아니라 Markdown Handoff
+NEXT_PROMPT 파일이 아니라 HANDOFF 중심 인수인계
 자동 멀티에이전트가 아니라 세션 분리형 역할 분담
-전체 repo 스캔이 아니라 TASK.md 기반 작업 계약
+전체 repo 스캔이 아니라 TASK.md + CODEMAP 기반 작업 계약
 ```
