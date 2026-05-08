@@ -8,7 +8,7 @@
 - Managed context workflow defined.
 - Manual Unity integration is the default workflow.
 - Session-separated agent roles are defined.
-- Handoff templates are available.
+- `HANDOFF.md` is the central handoff and next-prompt document.
 
 ## In Progress
 
@@ -24,13 +24,22 @@
 
 1. Copy this harness into a Unity project repository.
 2. Send `prompts/project_setup.md` to GPT Project.
-3. Fill `docs/PRD.md` with the actual game or app concept.
-4. Fill `docs/ARCHITECTURE.md` with the actual project structure.
-5. Fill `docs/CODEMAP.md` with exact source paths.
-6. Fill `docs/UNITY_CONTEXT.md` with scene, prefab, GameObject, component, and script summaries.
-7. Create the first feature spec in `docs/features/`.
-8. Replace `docs/TASK.md` with the first real Planner or Implementer task.
-9. Use `docs/NEXT_PROMPT.md` to start the next agent session.
+3. Fill required setup docs:
+   - `docs/PRD.md`
+   - `docs/ARCHITECTURE.md`
+   - `docs/CURRENT.md`
+   - `docs/TASK.md`
+   - `docs/HANDOFF.md`
+   - `docs/CODEMAP.md`
+   - `docs/features/001_FirstFeature.md`
+4. Fill optional docs only when needed:
+   - `docs/UNITY_CONTEXT.md`
+   - `docs/INTEGRATION_GUIDE.md`
+   - `docs/REVIEW.md`
+   - `docs/DECISIONS_PENDING.md`
+   - `docs/ADR.md`
+5. Replace `docs/TASK.md` with the first real Planner or Implementer task.
+6. Use `docs/HANDOFF.md` / Next Agent Prompt to start the next agent session.
 
 ## Do Not Touch
 
@@ -43,4 +52,4 @@
 
 - Refocused the harness from MCP-by-default to Manual Unity Integration.
 - Added Planner, Implementer, Reviewer, and Unity Guide Writer roles.
-- Added Markdown handoff documents for session-separated workflows.
+- Reduced default required docs and moved next-agent prompts into `HANDOFF.md`.
