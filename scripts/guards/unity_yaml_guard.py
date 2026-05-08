@@ -3,6 +3,9 @@
 
 Extend this script to block direct edits to Unity scene, prefab, asset, meta,
 ProjectSettings, and Packages files unless the task explicitly allows them.
+
+This script is a stub. It does not protect the repository unless explicitly wired
+into a local workflow, pre-commit hook, Codex wrapper, or CI check.
 """
 
 from pathlib import Path
