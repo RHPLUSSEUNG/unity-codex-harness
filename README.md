@@ -94,17 +94,16 @@ MCP를 꼭 써야 하는 경우에는 별도 advanced workflow로 다루고, 기
 project/
 ├── AGENTS.md
 ├── docs/
-│   ├── PRD.md
-│   ├── ARCHITECTURE.md
-│   ├── ADR.md
-│   ├── CURRENT.md
 │   ├── TASK.md
+│   ├── CURRENT.md
 │   ├── HANDOFF.md
 │   ├── CODEMAP.md
-│   ├── UNITY_CONTEXT.md
+│   ├── PRD.md
+│   ├── ARCHITECTURE.md
 │   ├── REVIEW.md
 │   ├── INTEGRATION_GUIDE.md
 │   ├── DECISIONS_PENDING.md
+│   ├── UNITY_CONTEXT.md
 │   └── features/
 │       └── 001_FirstFeature.md
 ├── prompts/
@@ -122,31 +121,35 @@ project/
         └── circuit_breaker.py
 ```
 
-### 초기 필수 문서
+### Core
 
-새 프로젝트에 처음 적용할 때는 아래 문서만 먼저 채워도 충분합니다.
+항상 유지하고, 일반 작업에서 우선 읽는 문서입니다.
 
 ```text
 AGENTS.md
-docs/PRD.md
-docs/ARCHITECTURE.md
-docs/CURRENT.md
 docs/TASK.md
+docs/CURRENT.md
 docs/HANDOFF.md
 docs/CODEMAP.md
-docs/features/001_FirstFeature.md
+docs/PRD.md
+docs/ARCHITECTURE.md
 ```
 
-### 필요할 때만 쓰는 선택 문서
+### Optional
 
-아래 문서는 모든 작업에서 읽거나 채울 필요가 없습니다.
+필요할 때만 읽거나 갱신합니다.
 
 ```text
-docs/ADR.md                  # 설계 결정이 생겼을 때
-docs/UNITY_CONTEXT.md        # 씬/프리팹/SerializedField 요약이 필요할 때
-docs/REVIEW.md               # PR 또는 diff 리뷰가 있을 때
-docs/INTEGRATION_GUIDE.md    # 사용자의 Unity Editor 수동 반영 절차가 필요할 때
-docs/DECISIONS_PENDING.md    # 사용자가 결정해야 할 문제가 있을 때
+docs/REVIEW.md
+docs/INTEGRATION_GUIDE.md
+docs/DECISIONS_PENDING.md
+docs/UNITY_CONTEXT.md
+```
+
+### Remove or merge
+
+```text
+docs/NEXT_PROMPT.md -> merge into docs/HANDOFF.md
 ```
 
 `docs/NEXT_PROMPT.md`는 별도 파일로 두지 않습니다. 다음 agent에게 보낼 copy-paste prompt는 `docs/HANDOFF.md`의 **Next Agent Prompt** 섹션에 둡니다.
@@ -159,7 +162,7 @@ docs/DECISIONS_PENDING.md    # 사용자가 결정해야 할 문제가 있을 �
 |---|---|---|
 | Level 0 | Tiny fix | `AGENTS.md`, `docs/TASK.md`, target file |
 | Level 1 | Normal feature | `AGENTS.md`, `docs/TASK.md`, `docs/CURRENT.md`, relevant `ARCHITECTURE.md` section, feature spec, 2-5 source files |
-| Level 2 | Architecture-impacting feature | `AGENTS.md`, `docs/TASK.md`, `docs/CURRENT.md`, `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/ADR.md`, feature spec, 5-10 source files |
+| Level 2 | Architecture-impacting feature | `AGENTS.md`, `docs/TASK.md`, `docs/CURRENT.md`, `docs/PRD.md`, `docs/ARCHITECTURE.md`, feature spec, 5-10 source files |
 | Level 3 | Manual Unity integration | `AGENTS.md`, `docs/TASK.md`, `docs/CURRENT.md`, `docs/UNITY_CONTEXT.md`, `docs/INTEGRATION_GUIDE.md`, changed file list |
 | Level 4 | Review / refactor | `AGENTS.md`, `docs/TASK.md`, `docs/HANDOFF.md`, `docs/REVIEW.md`, PR diff, changed files |
 
@@ -178,18 +181,6 @@ Do not read every harness document just because it exists.
 ### AGENTS.md
 
 모든 세션이 따르는 최상위 규칙입니다.
-
-### docs/PRD.md
-
-무엇을 만들고, 무엇을 만들지 않을지 정의합니다.
-
-### docs/ARCHITECTURE.md
-
-실제 폴더 구조, 시스템 경계, 의존성 방향, 네이밍 규칙, Scene / Prefab 처리 원칙을 정의합니다.
-
-### docs/CURRENT.md
-
-현재 프로젝트 상태판입니다.
 
 ### docs/TASK.md
 
@@ -212,15 +203,9 @@ Done Criteria
 Handoff Output Required
 ```
 
-중요 규칙:
+### docs/CURRENT.md
 
-```text
-TASK.md에는 현재 작업 하나만 둔다.
-여러 작업을 넣지 않는다.
-Allowed Files는 가능한 1-5개 수준으로 좁힌다.
-docs/** 같은 넓은 범위는 문서 정리 작업에서만 사용한다.
-Read 목록은 Required / Optional로 나누어 모든 문서를 읽지 않게 한다.
-```
+현재 프로젝트 상태판입니다.
 
 ### docs/HANDOFF.md
 
@@ -241,9 +226,17 @@ Next agent prompt
 
 Codex가 파일을 찾느라 `Assets/` 전체를 검색하지 않도록 돕는 index입니다.
 
-### 선택 문서
+### docs/PRD.md
 
-`docs/REVIEW.md`, `docs/INTEGRATION_GUIDE.md`, `docs/UNITY_CONTEXT.md`, `docs/DECISIONS_PENDING.md`, `docs/ADR.md`는 필요한 상황에서만 읽거나 갱신합니다.
+무엇을 만들고, 무엇을 만들지 않을지 정의합니다.
+
+### docs/ARCHITECTURE.md
+
+실제 폴더 구조, 시스템 경계, 의존성 방향, 네이밍 규칙, Scene / Prefab 처리 원칙을 정의합니다.
+
+### Optional docs
+
+`docs/REVIEW.md`, `docs/INTEGRATION_GUIDE.md`, `docs/DECISIONS_PENDING.md`, `docs/UNITY_CONTEXT.md`는 필요한 상황에서만 읽거나 갱신합니다.
 
 ---
 
@@ -251,7 +244,7 @@ Codex가 파일을 찾느라 `Assets/` 전체를 검색하지 않도록 돕는 i
 
 1. 이 저장소의 파일을 Unity 프로젝트 루트로 복사합니다. `Assets/` 안에 넣지 않는 것을 권장합니다.
 2. `prompts/project_setup.md` 내용을 GPT Project에 보냅니다.
-3. GPT는 구현 코드를 작성하지 않고 최소 필수 문서를 프로젝트에 맞게 채웁니다.
+3. GPT는 구현 코드를 작성하지 않고 Core 문서를 프로젝트에 맞게 채웁니다.
 4. `docs/TASK.md`는 항상 현재 작업 하나만 담습니다.
 5. 다음 세션에 보낼 prompt는 `docs/HANDOFF.md`의 Next Agent Prompt를 사용합니다.
 
