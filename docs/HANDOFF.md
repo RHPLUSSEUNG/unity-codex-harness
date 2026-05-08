@@ -4,6 +4,8 @@ This file is the minimal handoff document for the next agent session.
 
 Do not use this as a passive changelog. Keep it actionable and short enough for the next agent to read first.
 
+This file also replaces a separate NEXT_PROMPT.md. Put the next copy-paste-ready prompt in the final section below.
+
 ## Current Feature
 
 - Feature:
@@ -62,20 +64,39 @@ If yes, summarize what the user must do in Unity Editor:
 
 Planner / Implementer / Reviewer / Unity Guide Writer
 
-## Next Agent Instructions
+## Next Agent Prompt
+
+Keep this section copy-paste ready for the user.
 
 ```text
-Send this to the next agent:
-
 You are the [Planner / Implementer / Reviewer / Unity Guide Writer] Agent for this Unity project.
 
-Read:
+Read first:
 - AGENTS.md
 - docs/TASK.md
 - docs/HANDOFF.md
 
-Task:
-[Write the next actionable task here.]
+Additional files to read:
+- [Add only the files needed for this task]
 
-Do not modify Unity scene, prefab, asset, meta, ProjectSettings, Packages, or Input Actions files unless docs/TASK.md explicitly allows it.
+Context Level:
+- [Level 0 / Level 1 / Level 2 / Level 3 / Level 4]
+
+Task:
+[Write one clear task.]
+
+Constraints:
+- Do not expand scope.
+- Do not scan the whole project.
+- Do not modify Unity scene, prefab, asset, meta, ProjectSettings, Packages, or Input Actions files unless docs/TASK.md explicitly allows it.
+- Use manual Unity integration instructions by default.
+
+Required output:
+1. Plan before editing or reviewing
+2. Result summary
+3. Changed files or reviewed files
+4. Verification method
+5. Manual Unity integration needed
+6. Documentation updates needed
+7. Update docs/HANDOFF.md or docs/REVIEW.md if allowed by docs/TASK.md
 ```
