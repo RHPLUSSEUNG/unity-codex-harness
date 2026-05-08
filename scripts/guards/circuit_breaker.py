@@ -3,6 +3,9 @@
 
 Extend this script to detect repeated errors, repeated Unity Console failures,
 or repeated edits to the same file within a short time window.
+
+This script is a stub. It does not protect the repository unless explicitly wired
+into a local workflow, pre-commit hook, Codex wrapper, or CI check.
 """
 
 from collections import Counter
