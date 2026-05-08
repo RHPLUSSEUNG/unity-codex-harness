@@ -3,6 +3,9 @@
 
 Extend this script to inspect proposed shell commands before allowing an AI agent
 to execute them.
+
+This script is a stub. It does not protect the repository unless explicitly wired
+into a local workflow, pre-commit hook, Codex wrapper, or CI check.
 """
 
 import sys
