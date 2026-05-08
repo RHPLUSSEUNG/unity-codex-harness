@@ -17,7 +17,6 @@ Read first:
 
 Read only if relevant:
 - docs/DECISIONS_PENDING.md
-- docs/ADR.md
 - docs/UNITY_CONTEXT.md
 
 Rules:
