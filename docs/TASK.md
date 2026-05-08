@@ -49,17 +49,16 @@ For real Unity feature work:
 ### Required
 
 - AGENTS.md
-- docs/CURRENT.md
-- docs/PRD.md
-- docs/ARCHITECTURE.md
 - docs/TASK.md
+- docs/CURRENT.md
 - docs/HANDOFF.md
 - docs/CODEMAP.md
+- docs/PRD.md
+- docs/ARCHITECTURE.md
 - docs/features/001_FirstFeature.md
 
 ### Optional, only if relevant
 
-- docs/ADR.md
 - docs/REVIEW.md
 - docs/UNITY_CONTEXT.md
 - docs/INTEGRATION_GUIDE.md
@@ -95,7 +94,7 @@ For real Unity feature work:
 - Use `HANDOFF.md` as an actionable handoff, not a passive log.
 - Store the next copy-paste-ready agent prompt in `HANDOFF.md`.
 - Use `CODEMAP.md` to reduce broad source searching.
-- Treat `REVIEW.md`, `INTEGRATION_GUIDE.md`, `UNITY_CONTEXT.md`, `DECISIONS_PENDING.md`, and `ADR.md` as optional unless the current task requires them.
+- Treat `REVIEW.md`, `INTEGRATION_GUIDE.md`, `UNITY_CONTEXT.md`, and `DECISIONS_PENDING.md` as optional unless the current task requires them.
 - Mark template examples clearly so Codex does not assume they exist in the real Unity project.
 
 ## Out of Scope
@@ -118,7 +117,7 @@ AI agents must not directly modify Unity scenes, prefabs, assets, meta files, Pr
 - README explains managed context and manual Unity integration.
 - README explains new Unity project setup.
 - README explains session-separated agent workflow.
-- README distinguishes initial required docs from optional docs.
+- README distinguishes Core docs from Optional docs.
 - Prompts are available for project setup, planning, implementation, review, and manual Unity integration.
 - `HANDOFF.md` is the single next-prompt handoff location.
 - Guard script stubs remain available for later extension.
