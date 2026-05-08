@@ -32,7 +32,7 @@
 - Defines feature scope and requirements.
 - Updates feature specs and `docs/TASK.md`.
 - Chooses the context level.
-- Writes `docs/NEXT_PROMPT.md` for the next agent.
+- Writes the next copy-paste-ready prompt in `docs/HANDOFF.md`.
 - Does not implement code unless the task explicitly says so.
 
 ### Implementer Agent
@@ -47,7 +47,7 @@
 - Reviews PRs, diffs, reports, and handoff notes.
 - Checks scope, architecture fit, forbidden file changes, over-engineering, and missing verification.
 - Updates `docs/REVIEW.md`.
-- Writes `docs/NEXT_PROMPT.md` for the next Implementer or Planner.
+- Writes the next copy-paste-ready prompt in `docs/HANDOFF.md`.
 
 ### Unity Guide Writer
 
@@ -84,4 +84,4 @@ A task is complete only when:
 - Test or verification method is provided.
 - Manual Unity integration needs are reported.
 - Documentation update needs are reported.
-- `docs/HANDOFF.md`, `docs/REVIEW.md`, or `docs/NEXT_PROMPT.md` is updated when required by the task.
+- `docs/HANDOFF.md` or `docs/REVIEW.md` is updated when required by the task.
