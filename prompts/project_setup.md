@@ -35,7 +35,6 @@ Create or update these optional docs only if needed:
 - docs/INTEGRATION_GUIDE.md
 - docs/REVIEW.md
 - docs/DECISIONS_PENDING.md
-- docs/ADR.md
 
 Important:
 - Do not write implementation code yet.
