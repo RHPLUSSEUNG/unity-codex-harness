@@ -29,9 +29,10 @@ Required later:
 - Add required component to target GameObject.
 - Assign required SerializedField references.
 - Check Unity Console.
+- Use Unity Editor or an explicitly approved Unity tool only in a separate integration task.
 
 ## Done Criteria
 
 - Code compiles.
 - Requirements are satisfied.
-- Scene and prefab work, if needed, is listed as a separate MCP task.
+- Scene and prefab work, if needed, is listed as a separate Unity integration task.

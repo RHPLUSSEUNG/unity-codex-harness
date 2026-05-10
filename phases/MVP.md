@@ -14,7 +14,7 @@ Codex must not execute this file directly. GPT Project should convert one item a
 
 - Implement player movement.
 - Implement mouse aim.
-- Connect movement and aim through Unity MCP or Unity Editor.
+- Connect movement and aim through a separate Unity integration task.
 
 ## Phase 3: Combat Prototype
 

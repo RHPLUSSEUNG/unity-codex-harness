@@ -34,7 +34,7 @@ Why:
 Unity scene and prefab changes are riskier than normal code changes.
 
 Tradeoff:
-A feature may require two passes: code first, MCP or Unity Editor integration second.
+A feature may require two passes: code first, Unity integration second.
 
 ---
 
@@ -48,3 +48,16 @@ Unity projects can be damaged by automated scene, prefab, asset, meta, or Projec
 
 Tradeoff:
 The user must manually approve each task until guards and validation are mature.
+
+---
+
+## ADR-004: Do not keep a default MCP agent prompt
+
+Decision:
+The default harness uses Planner, Implementer, and Reviewer agents only. MCP-specific instructions are removed from the normal prompt set.
+
+Why:
+MCP instructions add context and token cost even when the task is code-only or documentation-only.
+
+Tradeoff:
+Unity MCP tasks must be written explicitly when integration really needs MCP.

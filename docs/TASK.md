@@ -6,7 +6,7 @@ Harness-Setup-01
 
 ## Goal
 
-Use this repository as a starting template for Unity + Codex + GPT Project + MCP harness engineering.
+Restructure this repository as a concise Unity + Codex harness template optimized for small context windows and low token use.
 
 ## Template Warning
 
@@ -44,17 +44,22 @@ For real Unity feature work:
 - `*.prefab`
 - `*.asset`
 - `*.meta`
+- `*.inputactions`
 - `ProjectSettings/*`
 - `Packages/*`
 
 ## Requirements
 
+- Center the workflow on three agents: Planner, Implementer, and Reviewer.
+- Define per-agent context budgets so agents do not read the full Unity project by default.
+- Remove the default MCP-agent workflow and MCP prompt because it is token-heavy.
+- Keep Unity integration as a separate task type that can use Unity Editor or another approved tool only when explicitly allowed.
 - Keep the harness concise.
 - Keep `TASK.md` focused on one task only.
 - Use `PRD.md` to define scope and MVP exclusions.
 - Use `ARCHITECTURE.md` to define structure and boundaries.
 - Use `ADR.md` to record decisions and tradeoffs.
-- Use `UNITY_CONTEXT.md` as a summary, not raw Unity YAML.
+- Use `UNITY_CONTEXT.md` as a short summary, not raw Unity YAML.
 - Mark template examples clearly so Codex does not assume they exist in the real Unity project.
 
 ## Out of Scope
@@ -62,12 +67,13 @@ For real Unity feature work:
 - Do not automate phase execution yet.
 - Do not generate Unity scene or prefab files.
 - Do not modify Unity project settings.
+- Do not implement Unity integration in this documentation task.
 
 ## Done Criteria
 
 - Harness documents exist.
 - README explains how to use them.
-- Prompts are available for Codex, MCP, and review.
+- Prompts are available for Planner, Codex implementation, and review.
 - Guard script stubs are available for later extension.
 - Template warnings are clear.
 
