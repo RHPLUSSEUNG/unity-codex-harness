@@ -22,7 +22,7 @@ Rules:
 - Prefer 1-5 allowed files for implementation tasks.
 - Put only files the Implementer must read in TASK.md Read.
 - Do not ask the Implementer to read all docs, all Assets, all scenes, all prefabs, or raw Unity YAML.
-- Do not allow direct edits to .unity, .prefab, .asset, .meta, ProjectSettings, or Packages files.
+- Do not allow direct edits to .unity, .prefab, .asset, .meta, .inputactions, ProjectSettings, or Packages files.
 - Separate code implementation from Unity integration.
 - Mark template examples clearly.
 

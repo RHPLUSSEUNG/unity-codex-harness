@@ -44,6 +44,7 @@ For real Unity feature work:
 - `*.prefab`
 - `*.asset`
 - `*.meta`
+- `*.inputactions`
 - `ProjectSettings/*`
 - `Packages/*`
 

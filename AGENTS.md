@@ -7,6 +7,7 @@
 - CRITICAL: Do not expand scope.
 - CRITICAL: Do not modify unrelated files.
 - CRITICAL: Do not manually edit `.unity`, `.prefab`, `.asset`, or `.meta` files.
+- CRITICAL: Do not edit Input Actions (`*.inputactions`) unless explicitly required and reviewed.
 - CRITICAL: Do not edit `ProjectSettings/` or `Packages/`.
 - CRITICAL: Code implementation and Unity scene/prefab integration must be separate tasks.
 - CRITICAL: Output a plan before editing.
