@@ -1,452 +1,96 @@
 # Unity Codex Harness
 
-Unity 프로젝트에서 GPT Project, Codex, Unity MCP를 함께 사용할 때의 하네스 구조입니다.
+Unity 프로젝트를 Codex로 작업할 때 컨텍스트 창과 토큰 소비를 줄이기 위한 Markdown 하네스 템플릿입니다.
 
-이 저장소는 Unity 프로젝트 자체가 아니라, **Unity 프로젝트 루트에 복사해서 사용하는 Markdown Harness 템플릿**입니다.
+이 저장소는 Unity 프로젝트가 아니라, Unity 프로젝트 루트에 복사해서 쓰는 작업 규칙과 프롬프트 초안입니다.
 
-권장 위치:
+## 기본 구조
 
 ```text
 UnityProjectRoot/
-├── Assets/
-├── Packages/
-├── ProjectSettings/
 ├── AGENTS.md
 ├── docs/
-├── prompts/
-├── phases/
-└── scripts/
-```
-
-목표는 단순합니다.
-
-```text
-GPT Project = 설계, 작업 분해, 리뷰
-Codex = 코드 구현
-Unity MCP = 씬, 프리팹, 컴포넌트 연결
-Markdown Harness = 규칙, 상태, 작업 계약서
-```
-
-이 README는 저장소 대문 가이드입니다. 처음 보는 사람은 이 파일만 읽어도 전체 구조와 운영 방식을 이해할 수 있어야 합니다.
-
----
-
-## 1. 핵심 원칙
-
-```text
-문서는 너무 줄이지 않는다.
-실행은 너무 자동화하지 않는다.
-Codex는 TASK.md의 현재 작업 하나만 수행한다.
-Unity 씬/프리팹 작업은 코드 구현 이후 MCP 작업으로 분리한다.
-```
-
-Claude식 하네스의 핵심은 `docs`, `CLAUDE.md`, 실행 엔진, hooks입니다. 이 프로젝트에서는 Unity + Codex 환경에 맞게 다음처럼 변환합니다.
-
-```text
-CLAUDE.md       -> AGENTS.md
-/harness        -> GPT Project의 Orchestrator 역할
-/review         -> GPT Project의 Reviewer 역할
-execute.py      -> 초기에는 사용하지 않음
-hooks           -> 필요 시 scripts/guards로 도입
-```
-
-Unity는 코드 외에도 Scene, Prefab, Asset, Meta, ProjectSettings가 얽혀 있으므로, Phase 자동 실행보다 `TASK.md` 단위 수동 승인 흐름이 안전합니다.
-
----
-
-## 2. 최종 하네스 구조
-
-```text
-project/
-├── AGENTS.md
-│
-├── docs/
+│   ├── TASK.md
+│   ├── CURRENT.md
 │   ├── PRD.md
 │   ├── ARCHITECTURE.md
 │   ├── ADR.md
-│   ├── CURRENT.md
-│   ├── TASK.md
 │   ├── UNITY_CONTEXT.md
 │   └── features/
-│       ├── 001_PlayerMovement.md
-│       ├── 002_MouseAim.md
-│       └── 003_WeaponSystem.md
-│
 ├── prompts/
-│   ├── codex_task.md
-│   ├── mcp_task.md
-│   └── review.md
-│
 ├── phases/
-│   └── MVP.md
-│
-└── scripts/
-    └── guards/
-        ├── dangerous_cmd_guard.py
-        ├── unity_yaml_guard.py
-        └── circuit_breaker.py
+└── scripts/guards/
 ```
 
-처음부터 전부 완성할 필요는 없습니다. 시작 시점에는 아래 파일만 있어도 충분합니다.
+## 에이전트
 
-```text
-AGENTS.md
-docs/PRD.md
-docs/ARCHITECTURE.md
-docs/ADR.md
-docs/CURRENT.md
-docs/TASK.md
-docs/UNITY_CONTEXT.md
-docs/features/001_FirstFeature.md
-```
-
----
-
-## 3. 에이전트 구성
-
-초기에는 3개면 충분합니다.
-
-| Agent | 역할 | 사용 위치 |
+| Agent | 역할 | 주요 입력 |
 |---|---|---|
-| GPT Project | Orchestrator, Planner, Reviewer, Documenter | ChatGPT Project |
-| Codex Implementer | C# 코드 작성, 파일 수정, 결과 보고 | Codex |
-| Unity MCP Integrator | Scene, Prefab, Component, SerializedField 연결 | Codex + Unity MCP |
+| Planner | 요구사항 정리, 설계, feature spec, `TASK.md` 작성 | `PRD.md`, `CURRENT.md`, 관련 feature 문서 |
+| Implementer | `TASK.md`에 허용된 파일만 수정 | `AGENTS.md`, `TASK.md`, 지정 파일 |
+| Reviewer | PR/diff 리뷰, 금지 파일 변경 확인, 검증 누락 확인 | `TASK.md`, diff, Codex report |
 
-확장 기준:
+기본 흐름에는 별도 Unity 통합 에이전트를 두지 않습니다. 통합 작업은 필요할 때만 별도 `TASK.md`로 작성합니다.
 
-```text
-테스트가 많아짐       -> Test Agent 추가
-리팩터링이 반복됨     -> Refactor Agent 추가
-문서 불일치가 잦아짐  -> Documenter Agent 분리
-```
-
----
-
-## 4. 문서별 역할
-
-### AGENTS.md
-
-Codex와 MCP가 따르는 최상위 규칙입니다.
-
-포함 내용:
+## 운영 흐름
 
 ```text
-- CRITICAL 규칙
-- 작업 전 Plan 제출
-- 작업 후 Report 제출
-- TASK.md 하나만 수행
-- 관련 없는 파일 수정 금지
-- .unity / .prefab / .asset / .meta 직접 수정 금지
-- ProjectSettings 수정 금지
-- 코드 구현과 Unity 연결 분리
+1. Planner가 요구사항을 하나의 작업으로 정리한다.
+2. Planner가 docs/TASK.md를 작성한다.
+3. Implementer가 AGENTS.md와 TASK.md, TASK.md에 지정된 파일만 읽는다.
+4. Implementer가 계획을 짧게 보고한 뒤 허용 파일만 수정한다.
+5. Reviewer가 diff, 금지 파일, 테스트 방법, Unity 통합 필요 여부를 확인한다.
+6. 필요한 경우 Unity 통합을 별도 TASK.md로 만든다.
 ```
 
-### docs/PRD.md
+## 문서 역할
 
-무엇을 만들고, 무엇을 만들지 않을지 정의합니다.
+- `AGENTS.md`: Codex가 항상 따르는 최상위 규칙.
+- `docs/TASK.md`: 현재 수행할 단 하나의 작업 계약서.
+- `docs/CURRENT.md`: 최근 상태 요약. 길어지면 분리합니다.
+- `docs/PRD.md`: 목표, 범위, MVP 제외 사항.
+- `docs/ARCHITECTURE.md`: 구조, 경계, 의존성 방향.
+- `docs/ADR.md`: 중요한 결정과 트레이드오프.
+- `docs/UNITY_CONTEXT.md`: Scene, Prefab, Script 요약. 원본 YAML을 붙이지 않습니다.
+- `docs/features/*`: 기능별 요구사항 초안.
+- `prompts/*`: Planner, Implementer, Reviewer용 짧은 프롬프트.
 
-중요 항목:
+## 컨텍스트 절감 규칙
 
-```text
-Goal
-Core Loop
-Core Features
-MVP Exclusions
-```
+- Codex는 `docs/TASK.md`의 `Read` 목록만 읽습니다.
+- 실제 기능 작업의 `Allowed Files`는 가능하면 1~5개로 제한합니다.
+- `docs/**` 전체 허용은 문서 정리 작업에서만 사용합니다.
+- `Assets/` 전체 스캔을 금지합니다.
+- `.unity`, `.prefab`, `.asset`, `.meta`, `ProjectSettings/`, `Packages/`는 직접 편집하지 않습니다.
+- `UNITY_CONTEXT.md`는 요약만 유지하고 150줄을 넘기면 인덱스로 분리합니다.
 
-특히 `MVP Exclusions`는 중요합니다. 안 만들 것을 명시하지 않으면 AI가 스코프를 계속 늘릴 수 있습니다.
+## 에이전트별 읽기 예산
 
-### docs/ARCHITECTURE.md
+| Agent | 기본 읽기 | 필요할 때만 읽기 | 금지 |
+|---|---|---|---|
+| Planner | `PRD.md`, `CURRENT.md`, 관련 feature 문서 | `ARCHITECTURE.md`, `ADR.md`, `UNITY_CONTEXT.md` | 전체 `Assets/`, 전체 `docs/`, raw Unity YAML |
+| Implementer | `AGENTS.md`, `TASK.md`, `TASK.md`의 `Read` 파일 | 작업에 필요한 최대 5개 소스 파일 | 전체 프로젝트 스캔 |
+| Reviewer | `AGENTS.md`, `TASK.md`, Codex report, diff | Unity Console 결과, 변경 파일 일부 | 변경 없는 Unity 전체 구성 읽기 |
 
-어떻게 만들지 정의합니다.
+## Unity 통합
 
-포함 내용:
+코드 구현과 Unity Scene/Prefab 연결은 분리합니다.
 
-```text
-- 폴더 구조
-- 시스템 경계
-- 의존성 방향
-- Scene / Prefab 처리 원칙
-- ScriptableObject 사용 기준
-```
+Unity 연결이 필요한 경우 새 `docs/TASK.md`에 대상 Scene, GameObject, Prefab, Component, SerializedField를 명시합니다. 연결은 Unity Editor 또는 명시적으로 승인된 Unity 도구로만 수행합니다.
 
-주의:
+## 프롬프트
 
-```text
-이 저장소의 ARCHITECTURE.md는 템플릿입니다.
-Player / Weapon / Enemy 같은 항목은 예시이며, 실제 프로젝트 구조로 확정된 것이 아닙니다.
-실제 Unity 프로젝트에 복사한 뒤 프로젝트에 맞게 반드시 교체합니다.
-```
+- `prompts/planner.md`: 작업 분해와 `TASK.md` 작성용.
+- `prompts/codex_task.md`: Codex 구현용.
+- `prompts/review.md`: PR/diff 리뷰용.
 
-### docs/ADR.md
+## Guard
 
-왜 그렇게 결정했는지 기록합니다.
+`scripts/guards/`의 스크립트는 나중에 workflow, pre-commit, CI에 연결하기 위한 stub입니다. 현재 저장소를 자동으로 보호하지 않습니다.
 
-형식:
+## 시작 방법
 
-```text
-Decision: 무엇을 선택했는가
-Why: 왜 선택했는가
-Tradeoff: 무엇을 포기했는가
-```
-
-### docs/CURRENT.md
-
-현재 프로젝트 상태판입니다.
-
-포함 내용:
-
-```text
-Completed
-In Progress
-Known Issues
-Next
-Do Not Touch
-Recent Changes
-```
-
-80~120줄을 넘기면 `FEATURE_TRACKER.md`, `CHANGELOG.md`로 분리합니다.
-
-### docs/TASK.md
-
-Codex가 지금 수행할 단일 작업 계약서입니다.
-
-반드시 포함:
-
-```text
-Task ID
-Goal
-Read
-Allowed Files
-Forbidden Files
-Requirements
-Out of Scope
-Done Criteria
-Required Report
-```
-
-중요 규칙:
-
-```text
-TASK.md에는 현재 작업 하나만 둔다.
-여러 작업을 넣지 않는다.
-실제 기능 작업에서는 Allowed Files를 1~5개 수준으로 좁힌다.
-docs/** 같은 넓은 범위는 문서 정리 작업에서만 사용한다.
-```
-
-### docs/UNITY_CONTEXT.md
-
-Unity Scene, Prefab, Script 요약입니다.
-
-포함 내용:
-
-```text
-Scenes
-Main GameObjects
-Prefabs
-Scripts
-Connection Status
-Safety Notes
-```
-
-원칙:
-
-```text
-.unity, .prefab 원문을 붙이지 않는다.
-요약만 쓴다.
-150줄을 넘으면 SCENE_INDEX.md / PREFAB_INDEX.md / SCRIPT_INDEX.md로 분리한다.
-이 파일의 예시 Scene, GameObject, Prefab, Script는 실제 존재한다고 가정하지 않는다.
-실제 프로젝트 상태를 확인한 뒤 프로젝트별 내용으로 교체한다.
-```
-
----
-
-## 5. 운영 워크플로우
-
-```text
-1. 사용자 요구 입력
-2. GPT Project가 요구사항 정리
-3. PRD / ARCHITECTURE / ADR 확인
-4. Feature 문서 작성 또는 갱신
-5. GPT Project가 TASK.md 작성
-6. Codex가 TASK.md 기준으로 Plan 제출
-7. 사용자가 Plan 확인
-8. Codex가 코드 구현
-9. Codex가 결과 보고
-10. GPT Project가 리뷰
-11. 필요 시 MCP 작업으로 Unity 연결
-12. CURRENT.md / UNITY_CONTEXT.md 갱신
-13. Git 커밋
-```
-
----
-
-## 6. Codex 실행 원칙
-
-Codex에게는 항상 다음 원칙을 적용합니다.
-
-```text
-Read AGENTS.md and docs/TASK.md first.
-Perform only the current task.
-Do not scan the whole project.
-Do not modify scene, prefab, asset, meta, ProjectSettings, or Packages files.
-Before editing, output a plan.
-After editing, output the required report.
-```
-
-Codex 기본 읽기:
-
-```text
-AGENTS.md
-docs/TASK.md
-docs/CURRENT.md
-docs/ARCHITECTURE.md
-docs/features/관련기능.md
-```
-
-필요할 때만 읽기:
-
-```text
-docs/PRD.md
-docs/ADR.md
-docs/UNITY_CONTEXT.md
-```
-
-읽으면 안 되는 것:
-
-```text
-docs 전체
-Assets 전체
-*.unity
-*.prefab
-*.asset
-*.meta
-ProjectSettings/*
-Packages/*
-```
-
----
-
-## 7. MCP 실행 원칙
-
-MCP는 구현자가 아니라 Unity 연결자입니다.
-
-나쁜 지시:
-
-```text
-MCP로 무기 시스템 만들어줘.
-```
-
-좋은 지시:
-
-```text
-Codex가 WeaponController.cs를 작성한다.
-GPT가 리뷰한다.
-MCP가 Player에 WeaponController를 연결한다.
-MCP가 FirePoint를 연결한다.
-Console을 확인한다.
-```
-
-MCP 작업은 항상 코드 구현 이후 별도 Task로 분리합니다.
-
----
-
-## 8. Phase와 자동 실행
-
-`phases/MVP.md`는 장기 계획입니다.
-
-```text
-phases/MVP.md = 장기 로드맵
-docs/TASK.md = 실제 Codex 실행 단위
-```
-
-중요 규칙:
-
-```text
-Codex는 phases를 직접 실행하지 않는다.
-GPT Project가 phases에서 TASK.md를 하나씩 만든다.
-Codex는 TASK.md 하나만 실행한다.
-```
-
-`execute.py` 기반 자동 실행은 Unity 프로젝트 초기에는 사용하지 않습니다. 자동 실행은 guard, Git checkpoint, Unity Console 검사 루틴이 갖춰진 후 도입합니다.
-
----
-
-## 9. Guard 도입 기준
-
-초기에는 문서 규칙과 Git 체크포인트로 충분합니다. 위험이 커지면 아래 guard를 도입합니다.
-
-```text
-dangerous_cmd_guard.py
-unity_yaml_guard.py
-circuit_breaker.py
-```
-
-주의:
-
-```text
-현재 guard 스크립트는 stub입니다.
-로컬 workflow, pre-commit hook, Codex wrapper, CI 검사에 직접 연결하지 않으면 저장소를 자동으로 보호하지 않습니다.
-```
-
-### dangerous_cmd_guard.py
-
-차단 대상:
-
-```text
-rm -rf
-git reset --hard
-git clean -fd
-git push --force
-del /s
-rmdir /s
-```
-
-### unity_yaml_guard.py
-
-차단 대상:
-
-```text
-*.unity
-*.prefab
-*.asset
-*.meta
-ProjectSettings/*
-Packages/*
-```
-
-### circuit_breaker.py
-
-감지 대상:
-
-```text
-같은 컴파일 에러 반복
-같은 Unity Console 에러 반복
-같은 파일 반복 수정
-같은 실패 패턴 반복
-```
-
----
-
-## 10. 최종 규칙 요약
-
-```text
-1. PRD에는 반드시 MVP 제외 사항을 쓴다.
-2. ARCHITECTURE는 짧게 유지한다.
-3. ADR에는 선택과 포기한 대안을 기록한다.
-4. TASK.md에는 현재 작업 하나만 둔다.
-5. Codex는 TASK.md 중심으로 작업한다.
-6. Codex는 작업 전 Plan을 제출한다.
-7. Codex는 코드만 구현한다.
-8. Unity 연결은 MCP 작업으로 분리한다.
-9. GPT Project가 Codex 결과를 리뷰한다.
-10. 자동 execute.py는 Unity 안정화 전까지 사용하지 않는다.
-```
-
-핵심 결론:
-
-```text
-문서는 PRD / ARCHITECTURE / ADR 수준까지는 분리한다.
-실행은 TASK.md 하나로 제한한다.
-Unity 자동화는 execute.py보다 MCP 분리 실행을 우선한다.
-```
+1. 이 하네스를 Unity 프로젝트 루트에 복사합니다.
+2. `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/UNITY_CONTEXT.md`의 템플릿 예시를 실제 프로젝트 정보로 교체합니다.
+3. Planner가 첫 기능 문서를 만들고 `docs/TASK.md`를 현재 작업 하나로 교체합니다.
+4. Codex에는 `prompts/codex_task.md`를 사용합니다.

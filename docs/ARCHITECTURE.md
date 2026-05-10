@@ -5,14 +5,14 @@ This file is a template. Replace project-specific examples after copying this ha
 ## Harness Architecture
 
 ```text
-GPT Project
--> creates specs, tasks, reviews
+Planner Agent
+-> owns PRD, architecture, ADR, feature specs, and TASK.md
 
-Codex
--> implements code from TASK.md
+Implementer Agent
+-> edits only files allowed by TASK.md
 
-Unity MCP
--> connects scene, prefab, component, serialized fields
+Reviewer Agent
+-> reviews the diff or PR against TASK.md and Unity safety rules
 
 Markdown Harness
 -> stores project rules, state, context, and task contract
@@ -78,6 +78,6 @@ Replace this dependency map with the actual project dependency direction.
 
 ## Unity Integration Rule
 
-Code is implemented first. Scene and prefab integration happens later through Unity MCP or manual Unity Editor work.
+Code is implemented first. Scene and prefab integration happens later as a separate task through Unity Editor or an explicitly approved Unity tool.
 
 Do not manually edit `.unity`, `.prefab`, `.asset`, or `.meta` files to perform integration.

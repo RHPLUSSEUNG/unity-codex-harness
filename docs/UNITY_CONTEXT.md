@@ -5,6 +5,7 @@ This file summarizes Unity project context.
 This is a template. Do not assume any scene, prefab, GameObject, component, or script exists until this file is replaced with real project context.
 
 Do not paste raw `.unity`, `.prefab`, `.asset`, or `.meta` contents here.
+Keep this file short. Prefer names, ownership, serialized references, and unresolved integration notes over long descriptions.
 
 ## Scenes
 
@@ -55,13 +56,13 @@ Status: Example feature target. Not guaranteed to exist.
 ## Connection Status
 
 - Scene objects are not connected in this template.
-- MCP integration should be done after code implementation.
+- Unity integration should be done after code implementation as a separate task.
 - Replace this section with actual scene, prefab, component, and SerializedField connection status.
 
 ## Safety Notes
 
 - Do not manually edit scene or prefab YAML.
-- Use Unity MCP or Unity Editor for object/component connections.
-- Check Unity Console after MCP changes.
+- Use Unity Editor or an explicitly approved Unity tool for object/component connections.
+- Check Unity Console after integration changes.
 - Update this file after meaningful scene, prefab, or script structure changes.
 - If this file exceeds about 150 lines, split summaries into `SCENE_INDEX.md`, `PREFAB_INDEX.md`, and `SCRIPT_INDEX.md`.

@@ -2,8 +2,8 @@
 
 ## Completed
 
-- Initial harness guide created.
-- AGENTS.md created.
+- Concise harness guide created.
+- Three-agent workflow documented.
 - Core docs created.
 
 ## In Progress
@@ -31,4 +31,4 @@
 
 ## Recent Changes
 
-- Initial Markdown harness structure added.
+- MCP-first workflow removed from default docs to reduce token use.
